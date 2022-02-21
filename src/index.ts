@@ -32,6 +32,7 @@ import {
   interpretChannelDeployResult,
 } from "./deploy";
 import { getChannelId } from "./getChannelId";
+import { getDeployMessage } from "./getDeployMessage";
 import {
   getURLsMarkdownFromChannelDeployResult,
   postChannelSuccessComment,
@@ -45,6 +46,7 @@ const googleApplicationCredentials = getInput("firebaseServiceAccount", {
 });
 const configuredChannelId = getInput("channelId");
 const isProductionDeploy = configuredChannelId === "live";
+const configuredProductionDeployMessage = getInput("productionDeployMessage");
 const token = process.env.GITHUB_TOKEN || getInput("repoToken");
 const octokit = token ? getOctokit(token) : undefined;
 const entryPoint = getInput("entryPoint");
@@ -88,9 +90,14 @@ async function run() {
 
     if (isProductionDeploy) {
       startGroup("Deploying to production site");
+      const message = getDeployMessage(
+        configuredProductionDeployMessage,
+        context
+      );
       const deployment = await deployProductionSite(gacFilename, {
         projectId,
         target,
+        message,
       });
       if (deployment.status === "error") {
         throw Error((deployment as ErrorResult).error);
