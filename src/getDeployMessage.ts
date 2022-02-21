@@ -21,7 +21,7 @@ export function getDeployMessage(
   ghContext: Context
 ) {
   let tmpDeployMessage: string = "";
-
+  console.log("getDeployMessage Context", JSON.stringify(ghContext));
   if (!!configuredProductionDeployMessage) {
     tmpDeployMessage = configuredProductionDeployMessage;
   } else if (ghContext.payload.pull_request) {
