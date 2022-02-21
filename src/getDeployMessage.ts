@@ -21,13 +21,14 @@ export function getDeployMessage(
   ghContext: Context
 ) {
   let tmpDeployMessage: string = "";
-  console.log("getDeployMessage Context", JSON.stringify(ghContext));
   if (!!configuredProductionDeployMessage) {
     tmpDeployMessage = configuredProductionDeployMessage;
-  } else if (ghContext.payload.pull_request) {
-    const commitId = ghContext.payload.pull_request?.head.sha.substring(0, 7);
-    const branchName = ghContext.payload.pull_request.head.ref.substr(0, 20);
-    tmpDeployMessage = `commit ${commitId} pr${ghContext.payload.pull_request.number}-${branchName}`;
+  } else if (ghContext.payload) {
+    const commitId = ghContext.payload.sha.substring(0, 7);
+    const commitMessage =
+      ghContext.payload.head_commit.message.split("\n")?.[0] ?? "";
+    const author = ghContext.payload.head_commit.author.name ?? "";
+    tmpDeployMessage = `commit ${commitId} | ${author} | ${commitMessage}`;
   }
   // Deploy messages must be 255 characters or less
   const MESSAGE_MAX_LENGTH: number = 255;
