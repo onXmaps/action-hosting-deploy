@@ -24,9 +24,8 @@ export function getDeployMessage(
   if (!!configuredProductionDeployMessage) {
     tmpDeployMessage = configuredProductionDeployMessage;
   } else if (ghContext.payload) {
-    const commitId = ghContext.payload.sha.substring(0, 7);
-    const commitMessage =
-      ghContext.payload.head_commit.message.split("\n")?.[0] ?? "";
+    const commitId = ghContext.payload.head_commit.id.substring(0, 7);
+    const commitMessage = ghContext.payload.head_commit.message;
     const author = ghContext.payload.head_commit.author.name ?? "";
     tmpDeployMessage = `commit ${commitId} | ${author} | ${commitMessage}`;
   }
