@@ -25,10 +25,10 @@ export function getDeployMessage(
     tmpDeployMessage = configuredProductionDeployMessage;
   } else if (ghContext.payload) {
     const commitId = ghContext.payload.head_commit.id.substring(0, 7);
-    const commitMessage =
-      ghContext.payload.head_commit.message.split("/n")?.[0] ?? "";
+    const commitMessageFirstLine =
+      ghContext.payload.head_commit.message.split("\n")?.[0] ?? "";
     const author = ghContext.payload.head_commit.author.name ?? "";
-    tmpDeployMessage = `SHA ${commitId} | ${author} | ${commitMessage}`;
+    tmpDeployMessage = `SHA ${commitId} | ${author} | ${commitMessageFirstLine}`;
   }
   // Deploy messages must be 255 characters or less
   const MESSAGE_MAX_LENGTH: number = 255;

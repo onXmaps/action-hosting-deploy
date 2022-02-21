@@ -153,7 +153,7 @@ export async function deployProductionSite(
       "--only",
       `hosting${target ? ":" + target : ""}`,
       "-m",
-      `${message}`,
+      `"${message}"`,
     ],
     projectId,
     gacFilename
