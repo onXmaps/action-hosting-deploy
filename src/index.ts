@@ -51,6 +51,7 @@ const token = process.env.GITHUB_TOKEN || getInput("repoToken");
 const octokit = token ? getOctokit(token) : undefined;
 const entryPoint = getInput("entryPoint");
 const target = getInput("target");
+const firebaseToolsVersion = getInput("firebaseToolsVersion");
 
 async function run() {
   const isPullRequest = !!context.payload.pull_request;
@@ -98,6 +99,7 @@ async function run() {
         projectId,
         target,
         message,
+        firebaseToolsVersion,
       });
       if (deployment.status === "error") {
         throw Error((deployment as ErrorResult).error);
@@ -125,6 +127,7 @@ async function run() {
       expires,
       channelId,
       target,
+      firebaseToolsVersion,
     });
 
     if (deployment.status === "error") {
